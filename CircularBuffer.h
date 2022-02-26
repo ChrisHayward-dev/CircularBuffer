@@ -135,12 +135,15 @@ public:
 
 private:
 	T buffer[S];
+#ifndef CIRCULAR_BUFFER_INT_SAFE
 	T *head;
 	T *tail;
-#ifndef CIRCULAR_BUFFER_INT_SAFE
 	IT count;
 #else
+#warning Using volatiles for circular buffer
 	volatile IT count;
+	volatile  T *head;
+	volatile  T *tail;
 #endif
 };
 

@@ -34,7 +34,7 @@ bool CircularBuffer<T,S,IT>::unshift(T value) {
 		return false;
 	} else {
 		if (count++ == 0) {
-			tail = head;
+			/*tail = head;*/	// CTH DEBUG
 		}
 		return true;
 	}
@@ -53,7 +53,7 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 		return false;
 	} else {
 		if (count++ == 0) {
-			head = tail;
+			/*head = tail;*/	// CTH DEBUG
 		}
 		return true;
 	}
