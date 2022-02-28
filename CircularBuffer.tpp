@@ -46,27 +46,40 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 		tail = buffer;
 	}
 	*tail = value;
-	if (count == capacity) {
+	if (count == capacity) {					/* overflow is not interrupt safe */
 		if (++head == buffer + capacity) {
 			head = buffer;
 		}
 		return false;
+												// Omitted this section to make interrupt safe
 	} else {
+		count++;
+		return(true);
+	}
+	/* else {
 		if (count++ == 0) {
-			/*head = tail;*/	// CTH DEBUG
+			head = tail;
 		}
 		return true;
-	}
+	}*/
+
 }
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::shift() {
 	if (count == 0) return *head;
-	T result = *head++;
+	if(++head == buffer + capacity) {
+		head = buffer;
+	}
+	T result = *head;
+	count--;
+	
+/*	T result = *head++;
 	if (head >= buffer + capacity) {
 		head = buffer;
 	}
 	count--;
+*/
 	return result;
 }
 
@@ -83,7 +96,7 @@ T CircularBuffer<T,S,IT>::pop() {
 
 template<typename T, size_t S, typename IT>
 T inline CircularBuffer<T,S,IT>::first() const {
-	return *head;
+	return *(head+1);
 }
 
 template<typename T, size_t S, typename IT>
@@ -94,7 +107,7 @@ T inline CircularBuffer<T,S,IT>::last() const {
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::operator [](IT index) const {
 	if (index >= count) return *tail;
-	return *(buffer + ((head - buffer + index) % capacity));
+	return *(buffer + ((head - buffer + index + 1) % capacity));
 }
 
 template<typename T, size_t S, typename IT>
