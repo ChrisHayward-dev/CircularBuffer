@@ -140,7 +140,7 @@ private:
 	T *tail;
 	IT count;
 #else
-#warning Using volatiles for circular buffer
+//#warning Using volatiles for circular buffer
 	volatile IT count;
 	volatile  T *head;
 	volatile  T *tail;
