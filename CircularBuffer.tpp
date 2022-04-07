@@ -47,9 +47,9 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 	}
 	*tail = value;
 	if (count == capacity) {					/* overflow is not interrupt safe */
-		if (++head == buffer + capacity) {
+		/*if (++head == buffer + capacity) {
 			head = buffer;
-		}
+		}*/
 		return false;
 												// Omitted this section to make interrupt safe
 	} else {
