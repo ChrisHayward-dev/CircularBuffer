@@ -42,21 +42,22 @@ bool CircularBuffer<T,S,IT>::unshift(T value) {
 
 template<typename T, size_t S, typename IT>
 bool CircularBuffer<T,S,IT>::push(T value) {
-	if (++tail == buffer + capacity) {
-		tail = buffer;
-	}
-	*tail = value;
 	if (count == capacity) {					/* overflow is not interrupt safe */
 		/*if (++head == buffer + capacity) {
 			head = buffer;
 		}*/
 		return false;
-												// Omitted this section to make interrupt safe
+												
 	} else {
+		if (++tail == buffer + capacity) {
+			tail = buffer;
+		}
+		*tail = value;
+
 		count++;
 		return(true);
 	}
-	/* else {
+	/* else {     // Omitted this section to make interrupt safe
 		if (count++ == 0) {
 			head = tail;
 		}
