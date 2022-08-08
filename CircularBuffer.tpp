@@ -42,8 +42,8 @@ bool CircularBuffer<T,S,IT>::unshift(T value) {
 
 template<typename T, size_t S, typename IT>
 bool CircularBuffer<T,S,IT>::push(T value) {
-	if (count == capacity) {					/* overflow is not interrupt safe */
-		/*if (++head == buffer + capacity) {
+	if (count == capacity) {					/* if we are at capacity - quit adding samples */
+		/*if (++head == buffer + capacity) {	
 			head = buffer;
 		}*/
 		return false;
@@ -74,6 +74,11 @@ T CircularBuffer<T,S,IT>::shift() {
 	}
 	T result = *head;
 	count--;
+/*	if((count==0) && (head!=tail)) {		//DEBUG
+		digitalWrite(REDLED,HIGH);
+		digitalWrite(REDLED2,HIGH);
+		while(true);
+	}*/
 	
 /*	T result = *head++;
 	if (head >= buffer + capacity) {
